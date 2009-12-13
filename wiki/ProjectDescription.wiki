@@ -26,7 +26,7 @@ Support all common (frequently used) Java IO classes which mentioned in Thinking
 Support all Java IO classes listed in  [http://code.google.com/appengine/docs/java/jrewhitelist.html The JRE Class White List] of Google App Engine.
 
 = References =
-1) Extend the JDK Classes with Jakarta Commons, Part III - VFS 
-http://www.devx.com/Java/Article/30117/0/page/2 
-2) Writing code that runs unmodified in either GAE or non-GAE environments. 
-http://code.google.com/p/gaevfs/wiki/ApplicationPortability 
+  # Extend the JDK Classes with Jakarta Commons, Part III - VFS 
+  * http://www.devx.com/Java/Article/30117/0/page/2 
+  # Writing code that runs unmodified in either GAE or non-GAE environments. 
+  * http://code.google.com/p/gaevfs/wiki/ApplicationPortability 
