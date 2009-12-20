@@ -27,105 +27,140 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class File extends java.io.File {
+import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemException;
+import org.apache.commons.vfs.FileType;
+
+
+public class File {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2092369686030723158L;
+	private GaeVFSFacade gaeVFS;
+	private FileObject file;
+	
+
+	/**
+	 * @param fileSystemManager the fileSystemManager to set
+	 */
+	public void setGaeVFSFacade(GaeVFSFacade gaeVFS) {
+		this.gaeVFS = gaeVFS;
+	}
 
 	/**
 	 * @param parent
 	 * @param child
 	 */
 	public File(File parent, String child) {
-		super(parent, child);
-		// TODO Auto-generated constructor stub
+		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * @param parent
 	 * @param child
+	 * @throws FileSystemException 
 	 */
 	public File(String parent, String child) {
-		super(parent, child);
-		// TODO Auto-generated constructor stub
+		file = gaeVFS.resolveFile(parent + "/" + child);
 	}
 
 	/**
 	 * @param pathname
+	 * @throws FileSystemException 
 	 */
 	public File(String pathname) {
-		super(pathname);
-		// TODO Auto-generated constructor stub
+		file = gaeVFS.resolveFile(pathname);
 	}
 
 	/**
 	 * @param uri
+	 * @throws FileSystemException 
 	 */
 	public File(URI uri) {
-		super(uri);
-		// TODO Auto-generated constructor stub
+		file = gaeVFS.resolveFile(uri.toString());
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#canExecute()
 	 */
-	@Override
 	public boolean canExecute() {
 		// TODO Auto-generated method stub
-		return super.canExecute();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#canRead()
 	 */
-	@Override
+
 	public boolean canRead() {
-		// TODO Auto-generated method stub
-		return super.canRead();
+		boolean canRead = false;
+		
+		try {
+			canRead = file.isReadable();
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return canRead;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#canWrite()
 	 */
-	@Override
 	public boolean canWrite() {
-		// TODO Auto-generated method stub
-		return super.canWrite();
+		boolean canWrite = false;
+		
+		try {
+			canWrite = file.isWriteable();
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return canWrite;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#compareTo(java.io.File)
 	 */
-	@Override
+
 	public int compareTo(java.io.File pathname) {
-		// TODO Auto-generated method stub
-		return super.compareTo(pathname);
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#createNewFile()
 	 */
-	@Override
 	public boolean createNewFile() throws IOException {
-		// TODO Auto-generated method stub
-		return super.createNewFile();
+		boolean isExist = file.exists();
+		if (!isExist) {
+			file.createFile();
+		}
+		return !isExist;
 	}
+	
 
 	/* (non-Javadoc)
 	 * @see java.io.File#delete()
 	 */
-	@Override
-	public boolean delete() {
+	public boolean delete()  throws IOException {
 		// TODO Auto-generated method stub
-		return super.delete();
+		return file.delete();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#deleteOnExit()
 	 */
-	@Override
+
 	public void deleteOnExit() {
-		// TODO Auto-generated method stub
-		super.deleteOnExit();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
@@ -133,350 +168,428 @@ public class File extends java.io.File {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
-		return super.equals(obj);
+		if (!(obj instanceof java.io.File)) return false;
+    	String fileObjectPath = file.getName().getPath();
+    	return (((java.io.File)obj).getAbsolutePath().equals(fileObjectPath) &&
+    	((java.io.File)obj).getName().equals(file.getName().getBaseName()));	
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#exists()
 	 */
-	@Override
 	public boolean exists() {
-		// TODO Auto-generated method stub
-		return super.exists();
+		boolean isExist = false;
+		
+		try {
+			isExist =  file.exists();
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return isExist;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#getAbsoluteFile()
 	 */
-	@Override
 	public java.io.File getAbsoluteFile() {
-		// TODO Auto-generated method stub
-		return super.getAbsoluteFile();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#getAbsolutePath()
 	 */
-	@Override
+
 	public String getAbsolutePath() {
-		// TODO Auto-generated method stub
-		return super.getAbsolutePath();
+	    return file.getName().getPath();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#getCanonicalFile()
 	 */
-	@Override
+
 	public java.io.File getCanonicalFile() throws IOException {
-		// TODO Auto-generated method stub
-		return super.getCanonicalFile();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#getCanonicalPath()
 	 */
-	@Override
+
 	public String getCanonicalPath() throws IOException {
-		// TODO Auto-generated method stub
-		return super.getCanonicalPath();
+		return file.getName().getPathDecoded();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#getFreeSpace()
 	 */
-	@Override
 	public long getFreeSpace() {
-		// TODO Auto-generated method stub
-		return super.getFreeSpace();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#getName()
 	 */
-	@Override
+
 	public String getName() {
-		// TODO Auto-generated method stub
-		return super.getName();
+		return file.getName().getBaseName();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#getParent()
 	 */
-	@Override
+
 	public String getParent() {
-		// TODO Auto-generated method stub
-		return super.getParent();
+		String parentPath = null;
+		try {
+			parentPath = file.getParent().getName().getPath();
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return parentPath;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#getParentFile()
 	 */
-	@Override
 	public java.io.File getParentFile() {
-		// TODO Auto-generated method stub
-		return super.getParentFile();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#getPath()
 	 */
-	@Override
 	public String getPath() {
 		// TODO Auto-generated method stub
-		return super.getPath();
+		return file.getName().getPath();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#getTotalSpace()
 	 */
-	@Override
+
 	public long getTotalSpace() {
-		// TODO Auto-generated method stub
-		return super.getTotalSpace();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#getUsableSpace()
 	 */
-	@Override
+
 	public long getUsableSpace() {
-		// TODO Auto-generated method stub
-		return super.getUsableSpace();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#hashCode()
 	 */
-	@Override
+
 	public int hashCode() {
-		// TODO Auto-generated method stub
-		return super.hashCode();
+		return file.hashCode();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#isAbsolute()
 	 */
-	@Override
 	public boolean isAbsolute() {
-		// TODO Auto-generated method stub
-		return super.isAbsolute();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#isDirectory()
 	 */
-	@Override
+
 	public boolean isDirectory() {
-		// TODO Auto-generated method stub
-		return super.isDirectory();
+		boolean isDirectory = false;
+		
+		try {
+			isDirectory = (file.getType() == FileType.FOLDER);
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return isDirectory;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#isFile()
 	 */
-	@Override
 	public boolean isFile() {
-		// TODO Auto-generated method stub
-		return super.isFile();
+		boolean isFile = false;
+		
+		try {
+			isFile = (file.getType() == FileType.FILE);
+		} catch (FileSystemException e) {
+			e.printStackTrace();
+		}
+		
+		return isFile;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#isHidden()
 	 */
-	@Override
 	public boolean isHidden() {
-		// TODO Auto-generated method stub
-		return super.isHidden();
+		boolean isHidden = false;
+		try {
+			isHidden = file.isHidden();
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return isHidden;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#lastModified()
 	 */
-	@Override
 	public long lastModified() {
-		// TODO Auto-generated method stub
-		return super.lastModified();
+		long lastModified = 0;
+		
+		try {
+			lastModified = file.getContent().getLastModifiedTime();
+		} catch (FileSystemException e) {
+			e.printStackTrace();
+		}
+		
+		return lastModified;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#length()
 	 */
-	@Override
 	public long length() {
-		// TODO Auto-generated method stub
-		return super.length();
+		long length = 0;
+		
+		try {
+			length = file.getContent().getSize();
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return length;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#list()
 	 */
-	@Override
 	public String[] list() {
-		// TODO Auto-generated method stub
-		return super.list();
+		String[] list = null;
+		try {
+			list = listChildrenAsStringArray(file, false);
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#list(java.io.FilenameFilter)
 	 */
-	@Override
 	public String[] list(FilenameFilter filter) {
-		// TODO Auto-generated method stub
-		return super.list(filter);
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#listFiles()
 	 */
-	@Override
 	public java.io.File[] listFiles() {
-		// TODO Auto-generated method stub
-		return super.listFiles();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#listFiles(java.io.FileFilter)
 	 */
-	@Override
 	public java.io.File[] listFiles(FileFilter filter) {
-		// TODO Auto-generated method stub
-		return super.listFiles(filter);
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#listFiles(java.io.FilenameFilter)
 	 */
-	@Override
 	public java.io.File[] listFiles(FilenameFilter filter) {
-		// TODO Auto-generated method stub
-		return super.listFiles(filter);
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#mkdir()
 	 */
-	@Override
 	public boolean mkdir() {
-		// TODO Auto-generated method stub
-		return super.mkdir();
+		boolean mkdir = false;
+		try {
+			file.createFolder();
+			mkdir = true;
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mkdir;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#mkdirs()
 	 */
-	@Override
 	public boolean mkdirs() {
-		// TODO Auto-generated method stub
-		return super.mkdirs();
+		boolean mkdirs = false;
+		try {
+			file.createFolder();
+			mkdirs = true;
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mkdirs;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#renameTo(java.io.File)
 	 */
-	@Override
 	public boolean renameTo(java.io.File dest) {
-		// TODO Auto-generated method stub
-		return super.renameTo(dest);
+		boolean renameTo = false;
+		try {
+			file.moveTo(gaeVFS.toFileObject(dest));
+			renameTo = true;
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return renameTo;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#setExecutable(boolean, boolean)
 	 */
-	@Override
 	public boolean setExecutable(boolean executable, boolean ownerOnly) {
-		// TODO Auto-generated method stub
-		return super.setExecutable(executable, ownerOnly);
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#setExecutable(boolean)
 	 */
-	@Override
 	public boolean setExecutable(boolean executable) {
-		// TODO Auto-generated method stub
-		return super.setExecutable(executable);
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#setLastModified(long)
 	 */
-	@Override
+
 	public boolean setLastModified(long time) {
-		// TODO Auto-generated method stub
-		return super.setLastModified(time);
+		boolean setLastModified = false;
+		
+		try {
+			file.getContent().setLastModifiedTime(time);
+			setLastModified = true;
+		} catch (FileSystemException e) {
+			e.printStackTrace();
+		}
+		return setLastModified;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#setReadable(boolean, boolean)
 	 */
-	@Override
 	public boolean setReadable(boolean readable, boolean ownerOnly) {
-		// TODO Auto-generated method stub
-		return super.setReadable(readable, ownerOnly);
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#setReadable(boolean)
 	 */
-	@Override
 	public boolean setReadable(boolean readable) {
-		// TODO Auto-generated method stub
-		return super.setReadable(readable);
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#setReadOnly()
 	 */
-	@Override
 	public boolean setReadOnly() {
-		// TODO Auto-generated method stub
-		return super.setReadOnly();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#setWritable(boolean, boolean)
 	 */
-	@Override
 	public boolean setWritable(boolean writable, boolean ownerOnly) {
-		// TODO Auto-generated method stub
-		return super.setWritable(writable, ownerOnly);
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#setWritable(boolean)
 	 */
-	@Override
 	public boolean setWritable(boolean writable) {
-		// TODO Auto-generated method stub
-		return super.setWritable(writable);
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#toString()
 	 */
-	@Override
+
 	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		return getPath();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#toURI()
 	 */
-	@Override
 	public URI toURI() {
-		// TODO Auto-generated method stub
-		return super.toURI();
+		URI uri = null;
+		
+		try {
+			uri = new URI(file.getName().getURI());
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return uri;
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#toURL()
 	 */
-	@Override
 	public URL toURL() throws MalformedURLException {
-		// TODO Auto-generated method stub
-		return super.toURL();
+		URL url = null;
+		
+		try {
+			url = file.getURL();
+		} catch (FileSystemException e) {
+			e.printStackTrace();
+		}
+		
+		return url;
 	}
 
+    /**
+     * Lists the children of a folder.
+     */
+    private String[] listChildrenAsStringArray(final FileObject dir,
+    						  				   final boolean recursive)
+        throws FileSystemException
+    {
+    	if (dir.getType() == FileType.FOLDER) {
+	        final FileObject[] children = dir.getChildren();
+	        final List list = new ArrayList();
+	        for (int i = 0; i < children.length; i++)
+	        {
+	            final FileObject child = children[i];
+	            list.add(child.getName().getBaseName());
+	            if (child.getType() == FileType.FOLDER)
+	            {
+	                if (recursive)
+	                {
+	                 	String[] childNames = listChildrenAsStringArray(child, recursive);
+	                 	list.addAll(Arrays.asList(childNames));
+	                }
+	            }
+	        }
+	        return (String[])list.toArray(new String[0]);
+    	} else {
+    		return null;
+    	}
+    }	
 }
