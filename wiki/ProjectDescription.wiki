@@ -19,7 +19,7 @@ The project kick off with following motivations:
 Able to run super file upload grails plugin in Google App Engine without code modification of the plugin.
 
 ==Version 0.5.0:==
-Support all common (frequently used) Java IO classes which mentioned in Thinking in Java 4th Edition. Please refer to JavaIOSupportedClasses for more information.
+Support all common (frequently used) Java IO classes which mentioned in Thinking in Java 4th Edition. Please refer to [http://code.google.com/p/appengine-java-io/wiki/JavaIOSupportedClasses JavaIOSupportedClasses] for more information.
 
 ==Version 1.0.0:==
 Support all Java IO classes listed in  [http://code.google.com/appengine/docs/java/jrewhitelist.html The JRE Class White List] of Google App Engine.
