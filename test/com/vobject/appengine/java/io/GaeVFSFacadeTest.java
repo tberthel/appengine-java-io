@@ -22,32 +22,49 @@
  */
 package com.vobject.appengine.java.io;
 
+import org.apache.commons.vfs.FileSystemException;
+import org.apache.commons.vfs.FileType;
+
 import com.newatlanta.appengine.junit.vfs.gae.GaeVfsTestCase;
+import com.vobject.appengine.java.io.GaeVFSFacade;
+
+import junit.framework.TestCase;
 
 public class GaeVFSFacadeTest extends GaeVfsTestCase {
-	
 	private GaeVFSFacade gaeVFS;
-
+	
 	/* (non-Javadoc)
-	 * @see com.vobject.appengine.LocalDatastoreTestCase#setUp()
+	 * @see junit.framework.TestCase#setUp()
 	 */
-	@Override
 	public void setUp() throws Exception {
-		// TODO Auto-generated method stub
 		super.setUp();
 		gaeVFS = GaeVFSFacade.getInstance();
 	}
 
 	/* (non-Javadoc)
-	 * @see com.vobject.appengine.LocalDatastoreTestCase#tearDown()
+	 * @see junit.framework.TestCase#tearDown()
 	 */
-	@Override
 	public void tearDown() throws Exception {
-		// TODO Auto-generated method stub
-		super.tearDown();
 		gaeVFS = null;
+		super.tearDown();
 	}
 
 
+	public void testIsGaeSchemeSupported() {
+		String[] schemes = gaeVFS.getSchemes();
+		boolean foundGae = false;
+		for (int i = 0; i < schemes.length; i++) {
+			if (schemes[i].equals("gae")) {
+				foundGae = true;
+				break;
+			}
+		}
+		assertTrue(foundGae);
+	}
+
+
+	public void testGetBaseFile() throws Exception {
+		assertTrue (gaeVFS.getBaseFile().getType() == FileType.FOLDER );
+	}
 
 }

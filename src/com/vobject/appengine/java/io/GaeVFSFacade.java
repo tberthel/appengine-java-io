@@ -51,21 +51,24 @@ import com.newatlanta.appengine.vfs.provider.GaeVFS;
 public class GaeVFSFacade implements FileSystemManager {
 	private static GaeVFSFacade gaeVfsFacade;
 	private FileSystemManager fsManager;
-	private FileObject currentDir;
 	
-	static GaeVFSFacade getInstance() throws FileSystemException {
+	static GaeVFSFacade getInstance() {
 		if (gaeVfsFacade == null) {
 			gaeVfsFacade = new GaeVFSFacade();
 			gaeVfsFacade.initialize();
-		}
+		} 
 		return gaeVfsFacade;
 	}
 	
-    private void initialize() throws FileSystemException {
+    private void initialize() {
 		//GaeVFS.setRootPath( "/" );
-        fsManager = GaeVFS.getManager();
+        try {
+			fsManager = GaeVFS.getManager();
+		} catch (FileSystemException e) {
+			throw new RuntimeException (e);
+		}
 		//fsManager = GaeVFS.getManager().setCombinedLocal( false );
-        currentDir = fsManager.resolveFile("cheekin1");
+        //currentDir = fsManager.resolveFile("cheekin1");
 	}
 
 	/**
@@ -179,8 +182,13 @@ public class GaeVFSFacade implements FileSystemManager {
 		return fsManager.createVirtualFileSystem(arg0);
 	}
 
-	public FileObject getBaseFile() throws FileSystemException {
-		return fsManager.getBaseFile();
+	public FileObject getBaseFile() {
+		try {
+			return fsManager.getBaseFile();
+		} catch (FileSystemException e) {
+			
+			throw new RuntimeException(e);
+		}
 	}
 
 	public CacheStrategy getCacheStrategy() {

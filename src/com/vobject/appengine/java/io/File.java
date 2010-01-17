@@ -32,6 +32,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemException;
@@ -44,16 +45,9 @@ public class File {
 	 * 
 	 */
 	private static final long serialVersionUID = -2092369686030723158L;
-	private GaeVFSFacade gaeVFS;
+	private final GaeVFSFacade GAE_VFS = GaeVFSFacade.getInstance();
 	private FileObject file;
 	
-
-	/**
-	 * @param fileSystemManager the fileSystemManager to set
-	 */
-	public void setGaeVFSFacade(GaeVFSFacade gaeVFS) {
-		this.gaeVFS = gaeVFS;
-	}
 
 	/**
 	 * @param parent
@@ -69,7 +63,7 @@ public class File {
 	 * @throws FileSystemException 
 	 */
 	public File(String parent, String child) {
-		file = gaeVFS.resolveFile(parent + "/" + child);
+		file = GAE_VFS.resolveFile(parent + "/" + child);
 	}
 
 	/**
@@ -77,7 +71,14 @@ public class File {
 	 * @throws FileSystemException 
 	 */
 	public File(String pathname) {
-		file = gaeVFS.resolveFile(pathname);
+		System.out.println("File(" + pathname + ")");
+		
+		if (!pathname.equals(".")) {
+			file = GAE_VFS.resolveFile(pathname);
+		} else {
+			file = GAE_VFS.getBaseFile();
+		}
+
 	}
 
 	/**
@@ -85,14 +86,13 @@ public class File {
 	 * @throws FileSystemException 
 	 */
 	public File(URI uri) {
-		file = gaeVFS.resolveFile(uri.toString());
+		file = GAE_VFS.resolveFile(uri.toString());
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#canExecute()
 	 */
 	public boolean canExecute() {
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
@@ -101,12 +101,12 @@ public class File {
 	 */
 
 	public boolean canRead() {
+		System.out.println("canRead()");
 		boolean canRead = false;
 		
 		try {
 			canRead = file.isReadable();
 		} catch (FileSystemException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return canRead;
@@ -139,6 +139,7 @@ public class File {
 	 * @see java.io.File#createNewFile()
 	 */
 	public boolean createNewFile() throws IOException {
+		System.out.println("createNewFile()");
 		boolean isExist = file.exists();
 		if (!isExist) {
 			file.createFile();
@@ -186,6 +187,7 @@ public class File {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("exists(): " + isExist);
 		return isExist;
 	}
 
@@ -377,9 +379,13 @@ public class File {
 	 * @see java.io.File#list()
 	 */
 	public String[] list() {
+		return list(false);
+	}
+	
+	public String[] list(boolean recursive) {
 		String[] list = null;
 		try {
-			list = listChildrenAsStringArray(file, false);
+			list = listChildrenAsStringArray(null, file, recursive);
 		} catch (FileSystemException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -391,7 +397,18 @@ public class File {
 	 * @see java.io.File#list(java.io.FilenameFilter)
 	 */
 	public String[] list(FilenameFilter filter) {
-		throw new UnsupportedOperationException();
+		return list(filter, false);
+	}
+	
+	public String[] list(FilenameFilter filter, boolean recursive) {
+		String[] list = null;
+		try {
+			list = listChildrenAsStringArray(filter, file, recursive);
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	/* (non-Javadoc)
@@ -424,7 +441,6 @@ public class File {
 			file.createFolder();
 			mkdir = true;
 		} catch (FileSystemException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return mkdir;
@@ -451,7 +467,7 @@ public class File {
 	public boolean renameTo(java.io.File dest) {
 		boolean renameTo = false;
 		try {
-			file.moveTo(gaeVFS.toFileObject(dest));
+			file.moveTo(GAE_VFS.toFileObject(dest));
 			renameTo = true;
 		} catch (FileSystemException e) {
 			// TODO Auto-generated catch block
@@ -567,22 +583,31 @@ public class File {
     /**
      * Lists the children of a folder.
      */
-    private String[] listChildrenAsStringArray(final FileObject dir,
+    private String[] listChildrenAsStringArray(final FilenameFilter filter,
+    										   final FileObject dir,
     						  				   final boolean recursive)
         throws FileSystemException
     {
+    	System.out.println("(dir.getType() == FileType.FOLDER) = " + (dir.getType() == FileType.FOLDER));
     	if (dir.getType() == FileType.FOLDER) {
 	        final FileObject[] children = dir.getChildren();
 	        final List list = new ArrayList();
 	        for (int i = 0; i < children.length; i++)
 	        {
 	            final FileObject child = children[i];
-	            list.add(child.getName().getBaseName());
+	            final String fileName = child.getName().getBaseName();
+	            if (filter != null) { 
+	            	if (filter.accept(null, fileName)) {
+	            		list.add(fileName);
+	            	}
+	            } else {
+	            	list.add(fileName);
+	            }
 	            if (child.getType() == FileType.FOLDER)
 	            {
 	                if (recursive)
 	                {
-	                 	String[] childNames = listChildrenAsStringArray(child, recursive);
+	                 	String[] childNames = listChildrenAsStringArray(filter, child, recursive);
 	                 	list.addAll(Arrays.asList(childNames));
 	                }
 	            }
