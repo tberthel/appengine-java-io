@@ -9,9 +9,10 @@
 	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/appengine-local-runtime.jar"/>
 	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/commons-vfs-2.0-SNAPSHOT.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/gaevfs-r452.jar"/>
 	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/gaevfs-test-r452.jar"/>
 	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/geronimo-servlet_2.5_spec-1.2.jar"/>
+	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/groovy-all-1.7.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
