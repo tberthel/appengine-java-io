@@ -64,6 +64,15 @@ class FileTest extends GaeVfsTestCase {
 		deleteFiles()							
 	}
 	
+	void testCreateAndRemoveDirectory() {
+		def dir = new File("abc/def/ghi")
+		assertTrue dir.mkdirs()
+		assertTrue dir.isDirectory()
+		assertTrue dir.delete()
+		def dir2 = new File("abc/def/ghi")
+		assertFalse dir2.exists() 
+	}
+	
 	void testDirListFilesByFilter() {
 		createFiles()
 		def currentDir = new File(".")

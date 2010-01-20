@@ -32,7 +32,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemException;
@@ -95,6 +94,10 @@ public class File {
 	public boolean canExecute() {
 		throw new UnsupportedOperationException();
 	}
+	
+	FileObject getFileObject() {
+		return file;
+	}	
 
 	/* (non-Javadoc)
 	 * @see java.io.File#canRead()
@@ -368,7 +371,6 @@ public class File {
 		try {
 			length = file.getContent().getSize();
 		} catch (FileSystemException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
