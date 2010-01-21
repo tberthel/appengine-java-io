@@ -2,7 +2,7 @@ package com.vobject.appengine.java.io.test
 
 import com.newatlanta.appengine.junit.vfs.gae.GaeVfsTestCase
 import java.util.regex.*
-
+import groovy.runtime.metaclass.com.vobject.JavaIODelegatingMetaClassesInvoker
 
 class FileTest extends GaeVfsTestCase {
 
@@ -27,6 +27,7 @@ class FileTest extends GaeVfsTestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp()
+		JavaIODelegatingMetaClassesInvoker.register()
 	}
 	
 	
@@ -49,7 +50,16 @@ class FileTest extends GaeVfsTestCase {
 			assertTrue (file.delete())
 			file = null
 		}				
-	}	
+	}
+	
+	void testCreateFile() {
+		def dir = new File("abc/def/ghi")
+		String fileName = "text.txt"
+		def file = new File(dir, fileName)
+		assertTrue file.createNewFile()
+		def textFile = new File("abc/def/ghi/text.txt")
+		assertTrue textFile.exists()
+	}
 
 	void testDirListAllFiles() {
 		createFiles()

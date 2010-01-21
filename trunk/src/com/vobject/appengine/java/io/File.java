@@ -53,7 +53,7 @@ public class File {
 	 * @param child
 	 */
 	public File(File parent, String child) {
-		throw new UnsupportedOperationException();
+		this(parent.getPath(), child);
 	}
 
 	/**
