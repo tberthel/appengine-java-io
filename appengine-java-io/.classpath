@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/appengine-api.jar"/>
+	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/appengine-api-labs.jar"/>
+	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/appengine-api-stubs.jar"/>
+	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/appengine-local-runtime.jar"/>
+	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/commons-vfs-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/gaevfs-r452.jar"/>
+	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/gaevfs-test-r452.jar"/>
+	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/geronimo-servlet_2.5_spec-1.2.jar"/>
+	<classpathentry kind="lib" path="D:/cheekin/dev/workspace/grails/appengine-java-io/lib/groovy-all-1.7.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
