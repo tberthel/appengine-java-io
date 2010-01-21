@@ -20,7 +20,7 @@
  * Author: Lim Chee Kin (limcheekin@vobject.com)
  *
  */
-package groovy.runtime.metaclass.java.io;
+package groovy.runtime.metaclass.com.vobject
 
 class PrintUtil {
 	static void printInvokeMethodEnter(String invokeMethodName, Object object, String methodName, Object[] arguments) {

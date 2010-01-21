@@ -23,8 +23,14 @@
 package com.vobject.appengine.java.io.test;
 
 import com.newatlanta.appengine.junit.vfs.gae.GaeVfsTestCase;
+import groovy.runtime.metaclass.com.vobject.JavaIODelegatingMetaClassesInvoker
 
 public class FileOutputStreamTest extends GaeVfsTestCase {
+	public void setUp() throws Exception {
+		super.setUp()
+		JavaIODelegatingMetaClassesInvoker.register()
+	}
+	
 	public void testWriteFileToDisk() throws Exception {
 		def out
 		def dest

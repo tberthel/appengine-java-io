@@ -20,21 +20,38 @@
  * Author: Lim Chee Kin (limcheekin@vobject.com)
  *
  */
-package groovy.runtime.metaclass.java.io;
+package groovy.runtime.metaclass.com.vobject
 
+import org.codehaus.groovy.runtime.InvokerHelper
 import static PrintUtil.*
 
-class FileOutputStreamMetaClass extends DelegatingMetaClass {
-	private static final String IMPLEMENT_CLASS_NAME = "com.vobject.appengine.java.io.FileOutputStream"
+
+class JavaIODelegatingMetaClassesInvoker {
+	static def classPairs = [ 
+	    "com.vobject.appengine.java.io.File":File.class,
+	    "com.vobject.appengine.java.io.FileOutputStream":FileOutputStream.class	    
+	] 	
 	
-	FileOutputStreamMetaClass(MetaClass delegate) {
-		super(delegate);
+	static void register() {		
+		classPairs.each { key, value ->
+			InvokerHelper.metaRegistry.setMetaClass(value, new JavaIODelegatingMetaClass(value, key))
+		}
+	}
+}
+
+class JavaIODelegatingMetaClass extends DelegatingMetaClass {
+	private String implementClassName
+	
+	JavaIODelegatingMetaClass(Class delegate, String implementClassName) {
+		super(delegate)
+		initialize()	
+		this.implementClassName = implementClassName
 	}
 	
 	Object invokeConstructor(Object[] arguments) {
 		printInvokeMethodEnter("invokeConstructor", null, null, arguments)
-		Object returnValue = Class.forName(IMPLEMENT_CLASS_NAME).newInstance (arguments)
+		Object returnValue = Class.forName(implementClassName).newInstance (arguments)
 		printInvokeMethodExit("invokeConstructor", returnValue)
 		return returnValue
-	}	
+	}		
 }
