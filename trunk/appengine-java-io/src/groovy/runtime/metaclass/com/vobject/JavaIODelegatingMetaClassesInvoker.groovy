@@ -29,7 +29,8 @@ import static PrintUtil.*
 class JavaIODelegatingMetaClassesInvoker {
 	static def classPairs = [ 
 	    "com.vobject.appengine.java.io.File":File.class,
-	    "com.vobject.appengine.java.io.FileOutputStream":FileOutputStream.class	    
+	    "com.vobject.appengine.java.io.FileOutputStream":FileOutputStream.class,
+		"com.vobject.appengine.java.io.FileInputStream":FileInputStream.class	  
 	] 	
 	
 	static void register() {		
