@@ -22,137 +22,119 @@
  */
 package com.vobject.appengine.java.io;
 
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.io.InputStream;
 
-public class FileInputStream extends java.io.FileInputStream {
+import org.apache.commons.vfs.FileSystemException;
+
+public class FileInputStream {
+	private InputStream in;
+	private final GaeVFSFacade GAE_VFS = GaeVFSFacade.getInstance();
 
 	/* (non-Javadoc)
 	 * @see java.io.FileInputStream#available()
 	 */
-	@Override
 	public int available() throws IOException {
-		// TODO Auto-generated method stub
-		return super.available();
+		return in.available();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.FileInputStream#close()
 	 */
-	@Override
 	public void close() throws IOException {
-		// TODO Auto-generated method stub
-		super.close();
+		in.close();
+		in = null;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.io.FileInputStream#finalize()
-	 */
-	@Override
-	protected void finalize() throws IOException {
-		// TODO Auto-generated method stub
-		super.finalize();
-	}
 
 	/* (non-Javadoc)
 	 * @see java.io.FileInputStream#getChannel()
 	 */
-	@Override
 	public FileChannel getChannel() {
-		// TODO Auto-generated method stub
-		return super.getChannel();
+		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.FileInputStream#read()
 	 */
-	@Override
 	public int read() throws IOException {
-		// TODO Auto-generated method stub
-		return super.read();
+		return in.read();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.FileInputStream#read(byte[], int, int)
 	 */
-	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
-		// TODO Auto-generated method stub
-		return super.read(b, off, len);
+		return in.read(b, off, len);
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.FileInputStream#read(byte[])
 	 */
-	@Override
 	public int read(byte[] b) throws IOException {
-		// TODO Auto-generated method stub
-		return super.read(b);
+		return in.read(b);
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.FileInputStream#skip(long)
 	 */
-	@Override
 	public long skip(long n) throws IOException {
-		// TODO Auto-generated method stub
-		return super.skip(n);
+		return in.skip(n);
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.InputStream#mark(int)
 	 */
-	@Override
-	public synchronized void mark(int readlimit) {
-		// TODO Auto-generated method stub
-		super.mark(readlimit);
+	public void mark(int readlimit) {
+		in.mark(readlimit);
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.InputStream#markSupported()
 	 */
-	@Override
 	public boolean markSupported() {
-		// TODO Auto-generated method stub
-		return super.markSupported();
+		return in.markSupported();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.InputStream#reset()
 	 */
-	@Override
 	public synchronized void reset() throws IOException {
-		// TODO Auto-generated method stub
-		super.reset();
+		in.reset();
 	}
 
 	/**
 	 * @param file
 	 * @throws FileNotFoundException
 	 */
-	public FileInputStream(File file) throws FileNotFoundException {
-		super(file);
-		// TODO Auto-generated constructor stub
+	public FileInputStream(File file) {
+		try {
+			in = file.getFileObject().getContent().getInputStream();
+		} catch (FileSystemException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
 	 * @param fdObj
 	 */
 	public FileInputStream(FileDescriptor fdObj) {
-		super(fdObj);
-		// TODO Auto-generated constructor stub
+		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * @param name
 	 * @throws FileNotFoundException
 	 */
-	public FileInputStream(String name) throws FileNotFoundException {
-		super(name);
-		// TODO Auto-generated constructor stub
+	public FileInputStream(String name) {
+		try {
+			in = GAE_VFS.resolveFile(name).getContent().getInputStream();
+		} catch (FileSystemException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
