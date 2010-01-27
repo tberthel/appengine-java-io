@@ -104,6 +104,16 @@ class FileTest extends GaeVfsTestCase {
 		
 		deleteFiles()				
 	}	
+	
+	void testRenameToFile() {
+		def source = new File("abc/def/ghi/text.file")
+		assertTrue source.createNewFile()
+		def dest = new File("xyz/abc.file")
+		assertTrue new File("xyz").mkdir()
+		assertTrue source.renameTo(dest)
+		assertFalse source.exists()
+		assertTrue dest.exists()
+	}	
 }
 
 class DirFilter implements FilenameFilter {
