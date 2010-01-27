@@ -87,6 +87,10 @@ public class File {
 	public File(URI uri) {
 		file = GAE_VFS.resolveFile(uri.toString());
 	}
+	
+	private File(FileObject fileObject) {
+		file = fileObject;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#canExecute()
@@ -134,7 +138,7 @@ public class File {
 	 * @see java.io.File#compareTo(java.io.File)
 	 */
 
-	public int compareTo(java.io.File pathname) {
+	public int compareTo(File pathname) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -197,8 +201,8 @@ public class File {
 	/* (non-Javadoc)
 	 * @see java.io.File#getAbsoluteFile()
 	 */
-	public java.io.File getAbsoluteFile() {
-		throw new UnsupportedOperationException();
+	public File getAbsoluteFile() {
+		return new File(file);
 	}
 
 	/* (non-Javadoc)
@@ -213,8 +217,8 @@ public class File {
 	 * @see java.io.File#getCanonicalFile()
 	 */
 
-	public java.io.File getCanonicalFile() throws IOException {
-		throw new UnsupportedOperationException();
+	public File getCanonicalFile() throws IOException {
+		return new File(file);
 	}
 
 	/* (non-Javadoc)
@@ -258,8 +262,15 @@ public class File {
 	/* (non-Javadoc)
 	 * @see java.io.File#getParentFile()
 	 */
-	public java.io.File getParentFile() {
-		throw new UnsupportedOperationException();
+	public File getParentFile() {
+		File parent = null;
+		try {
+			parent = new File(file.getParent());
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return parent;
 	}
 
 	/* (non-Javadoc)
@@ -416,24 +427,35 @@ public class File {
 	/* (non-Javadoc)
 	 * @see java.io.File#listFiles()
 	 */
-	public java.io.File[] listFiles() {
-		throw new UnsupportedOperationException();
+	public File[] listFiles() {
+		return listFiles(null, false);
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#listFiles(java.io.FileFilter)
 	 */
-	public java.io.File[] listFiles(FileFilter filter) {
+	public File[] listFiles(FileFilter filter) {
 		throw new UnsupportedOperationException();
 	}
 
 	/* (non-Javadoc)
 	 * @see java.io.File#listFiles(java.io.FilenameFilter)
 	 */
-	public java.io.File[] listFiles(FilenameFilter filter) {
-		throw new UnsupportedOperationException();
+	public File[] listFiles(FilenameFilter filter) {
+		return listFiles(filter, false);
 	}
 
+	public File[] listFiles(FilenameFilter filter, boolean recursive) {
+		File[] fileList = null;
+		try {
+			fileList = listChildrenAsFileArray(filter, file, recursive);
+		} catch (FileSystemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return fileList;
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.io.File#mkdir()
 	 */
@@ -466,10 +488,10 @@ public class File {
 	/* (non-Javadoc)
 	 * @see java.io.File#renameTo(java.io.File)
 	 */
-	public boolean renameTo(java.io.File dest) {
+	public boolean renameTo(File dest) {
 		boolean renameTo = false;
 		try {
-			file.moveTo(GAE_VFS.toFileObject(dest));
+			file.moveTo(dest.getFileObject());
 			renameTo = true;
 		} catch (FileSystemException e) {
 			// TODO Auto-generated catch block
@@ -590,7 +612,6 @@ public class File {
     						  				   final boolean recursive)
         throws FileSystemException
     {
-    	System.out.println("(dir.getType() == FileType.FOLDER) = " + (dir.getType() == FileType.FOLDER));
     	if (dir.getType() == FileType.FOLDER) {
 	        final FileObject[] children = dir.getChildren();
 	        final List list = new ArrayList();
@@ -619,4 +640,34 @@ public class File {
     		return null;
     	}
     }	
+    
+	private File[] listChildrenAsFileArray(final FilenameFilter filter,
+			final FileObject dir, final boolean recursive)
+			throws FileSystemException {
+		if (dir.getType() == FileType.FOLDER) {
+			final FileObject[] children = dir.getChildren();
+			final List list = new ArrayList();
+			for (int i = 0; i < children.length; i++) {
+				final FileObject child = children[i];
+				final String fileName = child.getName().getBaseName();
+				if (filter != null) {
+					if (filter.accept(null, fileName)) {
+						list.add(new File(child));
+					}
+				} else {
+					list.add(new File(child));
+				}
+				if (child.getType() == FileType.FOLDER) {
+					if (recursive) {
+						File[] childs = listChildrenAsFileArray(filter,
+								child, recursive);
+						list.addAll(Arrays.asList(childs));
+					}
+				}
+			}
+			return (File[]) list.toArray(new File[0]);
+		} else {
+			return null;
+		}
+	} 	
 }
