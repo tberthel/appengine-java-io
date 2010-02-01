@@ -1,5 +1,5 @@
 #summary Short description about the released of appengine-java-io 0.1.0 and appengine-java-io-metaclass 0.1.0.
-#labels Phase-Deploy
+#labels Phase-Deploy,Featured
 
 There are 3 items in the 0.1.0 released as following:
   * dependencies-0.1.0.zip: This is the libraries required by appengine-java-io. 
