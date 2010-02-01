@@ -16,14 +16,15 @@
 ||java.io.DataOutputStream||Yes||-|| 
 ||java.io.EOFException||-||-|| 
 ||java.io.Externalizable||-||-|| 
-||java.io.File||Yes||-|| 
+||java.io.File||Yes||0.1.0|| 
 ||java.io.FileDescriptor||-||-|| 
 ||java.io.FileFilter||-||-|| 
-||java.io.FileInputStream||Yes||-|| 
-||java.io.File-tFoundException||-||-|| 
+||java.io.FileInputStream||Yes||0.1.0|| 
+||java.io.FileOutputStream||Yes||0.1.0|| 
+||java.io.FileNotFoundException||-||-|| 
 ||java.io.FilePermission||-||-|| 
 ||java.io.FileReader||Yes||-|| 
-||java.io.FilenameFilter||Yes||-|| 
+||java.io.FilenameFilter||Yes||0.1.0|| 
 ||java.io.FilterInputStream||-||-|| 
 ||java.io.FilterOutputStream||-||-|| 
 ||java.io.FilterReader||-||-|| 
@@ -76,6 +77,7 @@
 ||java.io.WriteAbortedException||-||-|| 
 ||java.io.Writer||-||-||
 
-*Java IO Classes mentioned in TIJ4 but not listed in GAE's JRE Class White List*
-  * java.io.FileWriter
-  * java.io.FileOutputStream
+~~Java IO Classes mentioned in TIJ4 but not listed in GAE's JRE Class White List~~ <br />
+~~java.io.FileWriter~~ <br />
+~~java.io.FileOutputStream~~ <br />
+*Even classes not listed in GAE's JRE Class White List can be ported to GAE with Groovy Programming Language.*
