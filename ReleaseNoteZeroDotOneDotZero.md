@@ -1,0 +1,10 @@
+There are 3 items in the 0.1.0 released as following:
+  * dependencies-0.1.0.zip: This is the libraries required by appengine-java-io.
+  * appengine-java-io-0.1.0.jar: Core library of appengine-java-io. The application need to invoke [JavaIODelegatingMetaClassesInvoker.register()](http://code.google.com/p/appengine-java-io/source/browse/trunk/appengine-java-io/src/groovy/runtime/metaclass/com/vobject/JavaIODelegatingMetaClassesInvoker.groovy) once before invoking any IO classes to register the DelegatingMetaClass to MetaRegistry. This manual register mechanism is mainly for used by framework such as Grails to load appengine-java-io after the application loaded. To find out which classes are ported in this released, please refer to [JavaIOSupportedClasses](http://code.google.com/p/appengine-java-io/wiki/JavaIOSupportedClasses).
+  * appengine-java-io-metaclass-0.1.0.jar: This library is a drop-in jar to auto-load the DelegatingMetaClass to MetaRegistry. Application can use ported classes in GAE environment without invoking any method.
+
+To see how to use the ported classes, please refer to [FileTest](http://code.google.com/p/appengine-java-io/source/browse/trunk/appengine-java-io/test/com/vobject/appengine/java/io/test/FileTest.groovy) and [FileInputOutputStreamTest](http://code.google.com/p/appengine-java-io/source/browse/trunk/appengine-java-io/test/com/vobject/appengine/java/io/test/FileInputOutputStreamTest.groovy).
+
+During development of this released, we had discovered that we can port Java IO class to GAE even it is not listed in [The JRE Class White List](http://code.google.com/appengine/docs/java/jrewhitelist.html) such as [FileOutputStream](http://code.google.com/p/appengine-java-io/source/browse/trunk/appengine-java-io/src/com/vobject/appengine/java/io/FileOutputStream.java).
+
+To see the live demo for file upload, please go to [VObject File Manager](http://vobject-file-manager.appspot.com/).
